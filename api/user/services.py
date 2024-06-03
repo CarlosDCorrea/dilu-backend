@@ -1,10 +1,8 @@
 from typing import Dict
 
-from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 
 from .serializers import UserSerializer
 from .models import User
@@ -22,7 +20,7 @@ def create(request) -> Dict[str, str | int | dict]:
         print(f'serializer data:: {serializer.data}')
         response['data'] = {
             "user": serializer.validated_data,
-            "message": f"usuario creado satisfactoriamente, verificate con tu correo"}
+            "message": "usuario creado satisfactoriamente, verificate con tu correo"}
         response['status'] = status.HTTP_201_CREATED
     else:
         response['data'] = {'message_error': serializer.errors}
@@ -31,31 +29,7 @@ def create(request) -> Dict[str, str | int | dict]:
     return response
 
 
-def login(request):
-    email = request.data['email']
-    password = request.data['password']
-
-    response = {}
-
-    try:
-        user = authenticate(email=email, password=password)
-
-        if not user:
-            response['message']
-        token = Token.objects.get(user=user)
-        response.data = {'Token': token.key}
-    except Exception as e:
-        response.data = str(e)
-        response.status_code = status.HTTP_400_BAD_REQUEST
-
-        return response
-
-    return response
-
-# @TODO change for list all
-
-
-def list(request):
+def list_all(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
 
