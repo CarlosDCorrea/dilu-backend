@@ -4,7 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from .service import (create as create_service,
                       list_ as list_service,
-                      list_by_user as list_by_user_service)
+                      list_by_user as list_by_user_service,
+                      get as get_service)
 
 
 @api_view(['POST'])
@@ -35,3 +36,9 @@ def delete(request):
 @permission_classes([IsAuthenticated])
 def list_by_user(request):
     return Response(**list_by_user_service(request))
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get(request, category_id):
+    return Response(**get_service(request, category_id))

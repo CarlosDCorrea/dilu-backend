@@ -33,11 +33,11 @@ def list_(request):
     return response
 
 
-def update(request, id):
+def update(request, category_id):
     pass
 
 
-def delete(request, id):
+def delete(request, category_id):
     pass
 
 
@@ -49,3 +49,17 @@ def list_by_user(request):
     response['data'] = serializer.data
     response['status'] = status.HTTP_200_OK
     return response
+
+
+def get(request, category_id):
+    response = {}
+    try:
+        category = Category.objects.get(pk=category_id)
+        serializer = CategorySerializer(category)
+        response['data'] = serializer.data
+        response['status'] = status.HTTP_200_OK
+    except Category.DoesNotExist as e:
+        response['data'] = str(e)
+        response['status'] = status.HTTP_400_BAD_REQUEST
+    finally:
+        return response
