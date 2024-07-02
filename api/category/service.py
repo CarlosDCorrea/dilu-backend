@@ -38,7 +38,19 @@ def update(request, category_id):
 
 
 def delete(request, category_id):
-    pass
+    response = {}
+
+    try:
+        Category.objects.get(pk=category_id).delete()
+
+        response['data'] = {'message': 'Category deleted Successfully'}
+        response['status'] = status.HTTP_200_OK
+    except Category.DoesNotExist:
+        response['data'] = {
+            'message': 'No Category with the specified id found'}
+        response['status'] = status.HTTP_400_BAD_REQUEST
+    finally:
+        return response
 
 
 def list_by_user(request):
