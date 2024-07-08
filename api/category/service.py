@@ -4,8 +4,8 @@ from .serializers import CategorySerializer
 from .models import Category
 
 
-def create(request):
-    serializer = CategorySerializer(data=request.data)
+def create(data):
+    serializer = CategorySerializer(data=data)
 
     response = {}
 
@@ -22,7 +22,7 @@ def create(request):
     return response
 
 
-def list_(request):
+def list_():
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
 
@@ -33,11 +33,24 @@ def list_(request):
     return response
 
 
-def update(request, category_id):
-    pass
+def update(category_id, data):
+    response = {}
+
+    try:
+        category = Category.objects.get(pk=category_id)
+        serializer = CategorySerializer(instance=category, data=data, partial=True)
+
+        response['data'] = {'update': serializer.data,
+                            'message': 'Category updated successfully'}
+        response['status'] = status.HTTP_200_OK
+    except Category.DoesNotExist:
+        response['data'] = {'message', 'The category does not exists'}
+        response['status'] = status.HTTP_400_BAD_REQUEST
+    finally:
+        return response
 
 
-def delete(request, category_id):
+def delete(category_id):
     response = {}
 
     try:
@@ -53,17 +66,7 @@ def delete(request, category_id):
         return response
 
 
-def list_by_user(request):
-    categories = Category.objects.filter(user=request.user)
-    serializer = CategorySerializer(categories, many=True)
-
-    response = {}
-    response['data'] = serializer.data
-    response['status'] = status.HTTP_200_OK
-    return response
-
-
-def get(request, category_id):
+def get(category_id):
     response = {}
     try:
         category = Category.objects.get(pk=category_id)
