@@ -7,4 +7,6 @@ from .models import Expense
 class ExpenseAdmin(admin.ModelAdmin):
     list_display = ('expense_id',
                     'value',
-                    'user')
+                    'user',
+                    'created',
+                    'updated')

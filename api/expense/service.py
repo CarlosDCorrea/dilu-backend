@@ -13,7 +13,7 @@ def create(request):
 
     try:
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(user=request.user)
 
         response['data'] = {
             "message": "Expense created successfully"
@@ -53,6 +53,8 @@ def update(request, expense_id):
 
         serializer.is_valid(raise_exception=True)
 
+        print(f'validated data: {serializer.validated_data}')
+
         serializer.save()
 
         print('serializer is valid')
@@ -63,6 +65,9 @@ def update(request, expense_id):
     except Expense.DoesNotExist as e:
         response['data'] = {
             'error': f"It was not possible to update the expense error: {e}"}
+        response['status'] = status.HTTP_400_BAD_REQUEST
+    except serializers.ValidationError as e:
+        response['data'] = {'error': str(e)}
         response['status'] = status.HTTP_400_BAD_REQUEST
     except Exception as e:
         print("not handled error ocurred", str(e))
