@@ -1,11 +1,12 @@
-from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from .models import Category
 
+from ..user.serializers import UserSerializer
+
 
 class CategorySerializer(ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.email')
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Category

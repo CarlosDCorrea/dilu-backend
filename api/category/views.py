@@ -13,17 +13,16 @@ from .service import (create as create_service,
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def create(request):
-    data = request.data
-    return Response(**create_service(data))
+    return Response(**create_service(request))
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
-def list_(request):
+def list_():
     return Response(**list_service())
 
 
-@api_view(['UPDATE'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def update(request, category_id):
     data = request.data

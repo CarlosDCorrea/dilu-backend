@@ -4,14 +4,14 @@ from .serializers import CategorySerializer
 from .models import Category
 
 
-def create(data):
-    serializer = CategorySerializer(data=data)
+def create(request):
+    serializer = CategorySerializer(data=request.data)
 
     response = {}
 
     if serializer.is_valid():
-        category = serializer.save()
-        print(type(category))
+        category = serializer.save(user=request.user)
+
         response['data'] = {
             "message": f"Categoria creada satisfactoriamente {category}"
         }
@@ -74,7 +74,7 @@ def get(category_id):
         response['data'] = serializer.data
         response['status'] = status.HTTP_200_OK
     except Category.DoesNotExist as e:
-        response['data'] = str(e)
+        response['data'] = {'message': str(e)}
         response['status'] = status.HTTP_400_BAD_REQUEST
     finally:
         return response
