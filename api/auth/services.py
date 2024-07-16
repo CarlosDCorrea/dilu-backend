@@ -6,6 +6,8 @@ from rest_framework import status
 from ..user.models import User
 from ..user.services import create
 
+from ..services.email.load_template import validate_user_template
+
 
 def login(request):
     email, password = request.data.values()
@@ -23,15 +25,14 @@ def login(request):
         response['status'] = status.HTTP_200_OK
     except User.DoesNotExist as e:
         response['data'] = {'message': str(e)}
-
-    return response
+    finally:
+        return response
 
 
 def sign_up(request):
     response_create = create(request)
-
-    if response_create['status'] == 200:
-        # Send email validation
-        pass
+    user = response_create['data']['user']
+    if response_create['status'] == status.HTTP_201_CREATED:
+        validate_user_template(request, user['username'], user['email'], user['id'])
 
     return response_create

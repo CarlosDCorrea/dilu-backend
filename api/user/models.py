@@ -36,7 +36,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    # user_id field should not be here because this value must be always send from the frontend
+    # user_id field should not be here because this value must
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=250, blank=True, null=True)
@@ -56,7 +56,8 @@ class User(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        return True
+        if self.is_superuser:
+            return True
 
     def has_module_perms(self, app_label):
         return True

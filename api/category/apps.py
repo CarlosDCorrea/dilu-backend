@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ExpenseConfig(AppConfig):
+class CategoryConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'api.expense'
+    name = 'api.category'
