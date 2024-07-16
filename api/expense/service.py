@@ -40,12 +40,15 @@ def list_(request):
     paginated_queryset = paginator.paginate_queryset(expenses, request)
     serializer = ExpenseSerializer(paginated_queryset, many=True)
 
+    print(
+        f'paginated response: {paginator.get_paginated_response(serializer.data)}')
+
     return paginator.get_paginated_response(serializer.data)
 
 
 def update(request, expense_id):
     response = {}
-    print(request.data)
+
     try:
         expense = Expense.objects.get(pk=expense_id)
         serializer = ExpenseSerializer(
@@ -53,11 +56,7 @@ def update(request, expense_id):
 
         serializer.is_valid(raise_exception=True)
 
-        print(f'validated data: {serializer.validated_data}')
-
         serializer.save()
-
-        print('serializer is valid')
 
         response['data'] = {'update': serializer.data,
                             'message': 'Expense updated successfully'}
@@ -70,10 +69,22 @@ def update(request, expense_id):
         response['data'] = {'error': str(e)}
         response['status'] = status.HTTP_400_BAD_REQUEST
     except Exception as e:
-        print("not handled error ocurred", str(e))
+        response['data'] = {'server error': str(e)}
+        response['status'] = status.HTTP_400_BAD_REQUEST
     finally:
         return response
 
 
 def delete(expense_id):
-    pass
+    response = {}
+
+    try:
+        Expense.objects.get(pk=expense_id).delete()
+
+        response['data'] = {'message': 'Expense deleted successfully'}
+        response['status'] = status.HTTP_200_OK
+    except Expense.DoesNotExist:
+        response['data'] = {'error': 'This expense does not exist'}
+        response['status'] = status.HTTP_400_BAD_REQUEST
+    finally:
+        return response

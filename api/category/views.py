@@ -18,7 +18,7 @@ def create(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
-def list_():
+def list_(request):
     return Response(**list_service())
 
 

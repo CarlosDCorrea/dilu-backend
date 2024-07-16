@@ -19,7 +19,8 @@ def create(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_(request):
-    return Response(**list_service(request))
+    # list_service in this case do not returns a mapping object but a paginated response
+    return list_service(request)
 
 
 @api_view(['PUT'])

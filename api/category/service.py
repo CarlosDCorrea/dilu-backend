@@ -28,7 +28,10 @@ def list_():
 
     response = {}
 
-    response['data'] = serializer.data
+    response['data'] = {
+        'count': len(serializer.data),
+        'results': serializer.data
+    }
     response['status'] = status.HTTP_200_OK
     return response
 
@@ -38,7 +41,8 @@ def update(category_id, data):
 
     try:
         category = Category.objects.get(pk=category_id)
-        serializer = CategorySerializer(instance=category, data=data, partial=True)
+        serializer = CategorySerializer(
+            instance=category, data=data, partial=True)
 
         response['data'] = {'update': serializer.data,
                             'message': 'Category updated successfully'}
