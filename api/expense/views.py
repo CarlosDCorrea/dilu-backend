@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from .service import (
     create as create_service,
-    list_ as list_service,
+    list_by_owner as list_by_owner_service,
     update as update_service,
     delete as delete_service
 )
@@ -18,9 +18,9 @@ def create(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def list_(request):
-    # list_service in this case do not returns a mapping object but a paginated response
-    return list_service(request)
+def list_by_owner(request):
+    # list_by_owner_service in this case do not returns a mapping object but a paginated response
+    return list_by_owner_service(request)
 
 
 @api_view(['PUT'])

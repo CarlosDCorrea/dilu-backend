@@ -33,15 +33,12 @@ def create(request):
         return response
 
 
-def list_(request):
-    expenses = Expense.objects.all()
+def list_by_owner(request):
+    expenses = Expense.objects.filter(user=request.user)
     paginator = PageNumberPagination()
 
     paginated_queryset = paginator.paginate_queryset(expenses, request)
     serializer = ExpenseSerializer(paginated_queryset, many=True)
-
-    print(
-        f'paginated response: {paginator.get_paginated_response(serializer.data)}')
 
     return paginator.get_paginated_response(serializer.data)
 

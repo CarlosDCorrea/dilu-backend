@@ -14,6 +14,7 @@ class Expense(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     category_name = models.CharField(max_length=50, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # room ? a room can be somethng a user created (e.g home, work, friends)
     created = models.DateField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
 

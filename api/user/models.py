@@ -36,7 +36,6 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    # user_id field should not be here because this value must
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=250, blank=True, null=True)
