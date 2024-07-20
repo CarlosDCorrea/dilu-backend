@@ -92,6 +92,10 @@ def delete_several(expenses_id):
 
     count, _ = Expense.objects.filter(pk__in=expenses_id).delete()
 
+    if not expenses_id:
+        # delete() fails therefore it uses else's status code
+        response['data'] = {'error': 'No expenses id list provided'}
+
     if count:
         response['data'] = {'count': count}
         response['status'] = status.HTTP_200_OK

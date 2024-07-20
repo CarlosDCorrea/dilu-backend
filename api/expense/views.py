@@ -6,7 +6,8 @@ from .service import (
     create as create_service,
     list_by_owner as list_by_owner_service,
     update as update_service,
-    delete as delete_service
+    delete as delete_service,
+    delete_several as delete_several_service
 )
 
 
@@ -33,3 +34,10 @@ def update(request, expense_id):
 @permission_classes([IsAuthenticated])
 def delete(request, expense_id):
     return Response(**delete_service(expense_id))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_several(request):
+    expenses_id = request.data
+    return Response(**delete_several_service(expenses_id))
