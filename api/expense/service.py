@@ -85,3 +85,17 @@ def delete(expense_id):
         response['status'] = status.HTTP_400_BAD_REQUEST
     finally:
         return response
+
+
+def delete_several(expenses_id):
+    response = {}
+
+    count, _ = Expense.objects.filter(pk__in=expenses_id).delete()
+
+    if count:
+        response['data'] = {'count': count}
+        response['status'] = status.HTTP_200_OK
+    else:
+        response['data'] = {'error': 'No expenses to delete found'}
+        response['status'] = status.HTTP_400_BAD_REQUEST
+    return response
