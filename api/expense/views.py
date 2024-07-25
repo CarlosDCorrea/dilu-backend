@@ -7,7 +7,8 @@ from .service import (
     list_by_owner as list_by_owner_service,
     update as update_service,
     delete as delete_service,
-    delete_several as delete_several_service
+    delete_several as delete_several_service,
+    get_by_owner as get_by_owner_service
 )
 
 
@@ -41,3 +42,9 @@ def delete(request, expense_id):
 def delete_several(request):
     expenses_id = request.data
     return Response(**delete_several_service(expenses_id))
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_by_owner(request, expense_id):
+    return Response(**get_by_owner_service(request, expense_id))

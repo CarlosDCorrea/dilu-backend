@@ -7,6 +7,7 @@ from .serializers import ExpenseSerializer
 
 
 def create(request):
+    request.data['created'] = request.data['created'].split('T')[0]
     serializer = ExpenseSerializer(data=request.data)
 
     response = {}
@@ -20,14 +21,13 @@ def create(request):
         }
         response['status'] = status.HTTP_201_CREATED
     except serializers.ValidationError as e:
-        response['data'] = {
-            "error": f"It was not possible to create the expense errror: {e}"
-        }
+        print('==================================')
+        print(e.detail)
+        print(type(e.detail))
+        response['data'] = e.detail
         response['status'] = status.HTTP_400_BAD_REQUEST
     except Exception as e:
-        response['data'] = {
-            "error": f'A not handled error ocurred {e} of type {type(e)}'
-        }
+        response['data'] = e
         response['status'] = status.HTTP_500_INTERNAL_SERVER_ERROR
     finally:
         return response
@@ -44,6 +44,8 @@ def list_by_owner(request):
 
 
 def update(request, expense_id):
+    request.data['created'] = request.data['created'].split('T')[0]
+
     response = {}
 
     try:
@@ -103,3 +105,22 @@ def delete_several(expenses_id):
         response['data'] = {'error': 'No expenses to delete found'}
         response['status'] = status.HTTP_400_BAD_REQUEST
     return response
+
+
+def get_by_owner(request, expense_id):
+    response = {}
+
+    try:
+        expense = Expense.objects.get(pk=expense_id, user=request.user)
+        serializer = ExpenseSerializer(expense)
+
+        response['data'] = serializer.data
+        response['status'] = status.HTTP_200_OK
+    except Expense.DoesNotExist:
+        response['data'] = 'The expense does not exists'
+        response['status'] = status.HTTP_400_BAD_REQUEST
+    except Exception as e:
+        response['data'] = f'Error not handled {e}'
+        response['status'] = status.HTTP_500_INTERNAL_SERVER_ERROR
+    finally:
+        return response
