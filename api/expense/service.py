@@ -1,3 +1,5 @@
+from django.db.models import Sum
+
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -124,3 +126,14 @@ def get_by_owner(request, expense_id):
         response['status'] = status.HTTP_500_INTERNAL_SERVER_ERROR
     finally:
         return response
+
+
+def get_total_value(request, start_date, end_date):
+    response = {}
+
+    total_value = Expense.objects.filter(
+        user=request.user, created__range=(start_date, end_date)).aggregate(total=Sum('value', default=0))
+
+    response['data'] = total_value
+    response['status'] = status.HTTP_200_OK
+    return response

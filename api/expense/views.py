@@ -8,7 +8,8 @@ from .service import (
     update as update_service,
     delete as delete_service,
     delete_several as delete_several_service,
-    get_by_owner as get_by_owner_service
+    get_by_owner as get_by_owner_service,
+    get_total_value as get_total_value_service
 )
 
 
@@ -48,3 +49,9 @@ def delete_several(request):
 @permission_classes([IsAuthenticated])
 def get_by_owner(request, expense_id):
     return Response(**get_by_owner_service(request, expense_id))
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_total_value(request, start_date, end_date):
+    return Response(**get_total_value_service(request, start_date, end_date))
