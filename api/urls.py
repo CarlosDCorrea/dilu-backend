@@ -22,5 +22,6 @@ urlpatterns = [
     path('user/', include('api.user.urls')),
     path('auth/', include('api.auth.urls')),
     path('category/', include('api.category.urls')),
-    path('expense/', include('api.expense.urls'))
+    path('expense/', include('api.expense.urls')),
+    path('dilu/', include('api.dilu.urls')),
 ]

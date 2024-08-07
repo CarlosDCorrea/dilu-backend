@@ -137,3 +137,18 @@ def get_total_value(request, start_date, end_date):
     response['data'] = total_value
     response['status'] = status.HTTP_200_OK
     return response
+
+
+# GRAPHS
+def get_daily_graph(request, start_date, end_date):
+    response = {}
+
+    expenses = Expense.objects.filter(
+        user=request.user,
+        created__range=(start_date, end_date)).values('created').annotate(value=Sum('value'))
+
+    print(expenses)
+
+    response['data'] = expenses
+    response['status'] = status.HTTP_200_OK
+    return response

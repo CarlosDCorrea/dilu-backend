@@ -7,7 +7,8 @@ from .views import (
     delete,
     delete_several,
     get_by_owner,
-    get_total_value
+    get_total_value,
+    get_daily_graph
 )
 
 
@@ -20,5 +21,8 @@ urlpatterns = [
     path('get-by-owner/<uuid:expense_id>', get_by_owner, name='get-expense-by-owner'),
     re_path(r'^total-value/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})$',
             get_total_value,
-            name='get-total-expenses')
+            name='get-total-expenses'),
+    re_path(r'^daily-graph/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})$',
+            get_daily_graph,
+            name='get-daily-expenses-graph')
 ]

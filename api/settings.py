@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'api.user',
     'api.category',
     'api.expense',
+    'api.dilu',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

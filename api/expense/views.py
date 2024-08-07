@@ -9,7 +9,8 @@ from .service import (
     delete as delete_service,
     delete_several as delete_several_service,
     get_by_owner as get_by_owner_service,
-    get_total_value as get_total_value_service
+    get_total_value as get_total_value_service,
+    get_daily_graph as get_daily_graph_service
 )
 
 
@@ -54,4 +55,13 @@ def get_by_owner(request, expense_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_total_value(request, start_date, end_date):
+    print('here 2')
     return Response(**get_total_value_service(request, start_date, end_date))
+
+
+# Graphs
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_daily_graph(request, start_date, end_date):
+    print('here')
+    return Response(**get_daily_graph_service(request, start_date, end_date))

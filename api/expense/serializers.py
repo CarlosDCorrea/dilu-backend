@@ -21,3 +21,9 @@ class ExpenseSerializer(ModelSerializer):
                 f'wrong fields provided {extra_fields}')
 
         return attr
+
+
+class ExpenseGraphSerializer(ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = ['value', 'created']
